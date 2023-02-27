@@ -1,0 +1,10 @@
+import cv2
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+img = cv2.imread("./bushitu.png",0)
+
+img_ada = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 51, -5)
+
+cv2.imwrite("judgement_ADA.png",img_ada)
