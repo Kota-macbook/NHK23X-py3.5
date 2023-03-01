@@ -9,11 +9,11 @@ def shirushi(img_num,h,nLabels,stats,centroids):
         scale = 5
         color = (0, 0,0)
     
-        print(stats.shape)
+        #print(stats.shape)
     
         hidariue = [stats[i][0],stats[i][1]]
         migishita = [stats[i][0]+stats[i][2],stats[i][1]+stats[i][3]]
-        print(migishita)
+        #print(migishita)
         cv2.rectangle(img_num,hidariue,migishita,(0,0,0),5)
         cv2.circle(img_num, (xc,yc), 75,(255,0,255),-1)
         if xc-60>=0 and yc+60<=h:
