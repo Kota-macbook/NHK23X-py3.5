@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 import matplotlib as mp
 
-img = cv2.imread("./bushitu.png",0)
+img = cv2.imread("./grey/1_img.png",0)
 
-cv2.imwrite("grey.png",img)
+cv2.imwrite("./grey/grey.png",img)
 
 # cv2.imshow("test",img)
 # cv2.waitKey(1000)

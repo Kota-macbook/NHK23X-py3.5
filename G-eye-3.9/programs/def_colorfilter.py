@@ -21,6 +21,7 @@ def colorfilter(img, senter, haba):
 
 #ポールは(H, S, V)=(22.98, 188.84, 212) ただし、範囲は(0~180,0~255,0~255)
 
+ 
     low_H = int(23-haba[0])
     low_S = int(189-haba[1])
     low_V = int(212-haba[2])
