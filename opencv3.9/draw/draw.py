@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 import matplotlib as mp
 
-# img = np.ones((500,500,3),dtype=np.uint8)*255
+img = np.ones((500,500,3),dtype=np.uint8)*255
 
-img = cv2.imread("./IMG_6071.JPG")
+#img = cv2.imread("./IMG_6071.JPG")
 
 # print(img)
 

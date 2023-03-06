@@ -10,10 +10,10 @@ import copy
 import shirushi
 
 #画像をインポート
-img = cv2.imread("./test_images/pole.png")
+img = cv2.imread("./test_images/camera3.png")
 h,w = img.shape[:2]
 #ポールの色を抽出
-img_colorfiltered = def_colorfilter.colorfilter(img,(23,189,212),(4, 61, 108))
+img_colorfiltered = def_colorfilter.colorfilter(img,(23,189,212),(0, 61, 108))
 img_Gray = cv2.cvtColor(img_colorfiltered, cv2.COLOR_BGR2GRAY)
 
 #ノイズキャンセル
@@ -24,7 +24,7 @@ border = 103
 ret, img_judged = cv2.threshold(img_Gray, border, 255, cv2.THRESH_BINARY)
 
 #塊検出
-nLabels, img_blob, stats, centroids= blob.blobs(img_judged,20000)
+nLabels, img_blob, stats, centroids= blob.blobs(img_judged,1000)
 
 #番号割り振り画像作成
 img_num = copy.deepcopy(img)

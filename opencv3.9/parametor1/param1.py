@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-img_color = cv2.imread("./parametor1/export.png")
+img_color = cv2.imread("./parametor1/export2.png")
 
 img = cv2.cvtColor(img_color, cv2.COLOR_BGR2HSV)
 
@@ -22,5 +22,10 @@ for i in range(h):
 print("darkness="+str(darkness))
 print("whiteness="+str(whiteness))
 
+#1
 #darkness=[21, 128, 103]
 #whiteness=[24, 221, 255]
+
+#2
+#darkness=[0, 0, 0]
+#whiteness=[80, 72, 140]

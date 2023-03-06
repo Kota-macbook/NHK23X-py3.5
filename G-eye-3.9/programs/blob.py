@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import copy
+#import copy
 
 def blobs(img_G,upper):
     

@@ -4,7 +4,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import copy
 
-img_C = cv2.imread("./blob/pole.png")
+img_C = cv2.imread("./blob/1_img.png")
 img_G = cv2.cvtColor(img_C, cv2.COLOR_BGR2GRAY)
 
 ret, img_otsu = cv2.threshold(img_G, 0, 255, cv2.THRESH_OTSU)
