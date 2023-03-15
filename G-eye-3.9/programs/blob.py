@@ -6,6 +6,8 @@ def blobs(img_G,upper):
     
     nLabels, labelImages, stats, centroids = cv2.connectedComponentsWithStats(img_G)
     print("blob1 has ended")
+
+    print(stats)
     
     nLab2 = 0
     
@@ -47,6 +49,7 @@ def blobs(img_G,upper):
 #                    img_return[y,x]=255
 #
 #    print("blob6 has ended")
+    print(stats2)
     
     return nLab2, img_return, stats2, cent2
         

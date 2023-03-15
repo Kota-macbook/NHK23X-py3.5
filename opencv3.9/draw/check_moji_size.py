@@ -26,7 +26,7 @@ img = np.ones((501,501,3),dtype=np.uint8)*255
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 
-cv2.putText(img,"5",(-10,510),font,5,(255,0,0),1.5,cv2.LINE_AA)
+cv2.putText(img,"5",(-10,510),font,5,(255,0,0),1,cv2.LINE_AA)
 
 cv2.imwrite("white.png",img)
 

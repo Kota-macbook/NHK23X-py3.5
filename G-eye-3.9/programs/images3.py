@@ -4,17 +4,30 @@ import blob
 import shirushi
 import line
 import numpy as np
+import H_change
 
 def images_4return(img):
     h,w = img.shape[:2]
 #    print("imread has ended")
+
+
+
+    img = cv2.blur(img,(3,3))
     
+    #img_H = H_change.change_H(img,Hi=0.057177615)
+#default 0.034439
+
+    cv2.imwrite("./filtered_images/de_pole4.png", img)
+
+#    return img_H,0,0,0
+
     #ポールの色を抽出
-    img2 = color_filter_X.color_filter_X(img, (14,117,89),(32,226,256))
+    img2 = color_filter_X.color_filter_X(img, (16,135,40),(19,175,210))
 
     img3 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
     print("color_filter has ended")
 
+    return img3,0,0,0
 
     #2値化
     border = 2
@@ -26,6 +39,8 @@ def images_4return(img):
     #塊検出
     nLabels, img_no_use, stats, centroids= blob.blobs(img3,1000)
     print("blob has ended")
+
+    #img=line.lines(img,img3,h,w)
 
     #番号割り振り画像作成
     img = shirushi.shirushi(img,h,nLabels,stats,centroids)
