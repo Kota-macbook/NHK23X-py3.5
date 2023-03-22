@@ -4,7 +4,7 @@ from cv2 import threshold
 #import math
 #自作関数、場所は./programs/def_colorfilter.py
 import def_colorfilter
-import blob
+import test_images.blob as blob
 #import addition_img
 import shirushi
 #import copy

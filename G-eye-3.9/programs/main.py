@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 import images3
 import line
+import H_filter as Hf
 
 #画像インポートまではネット上のサンプルコードを流用して行いました
 #
@@ -19,6 +20,9 @@ pipe = rs.pipeline()
 profile = pipe.start(conf)
 
 cnt = 0
+
+img_Hfil=cv2.imread("./programs/images/H_filter.png")
+H_fil=Hf.filter(img_Hfil)
 
 #windowの設定
 cv2.namedWindow("view1", cv2.WINDOW_NORMAL)
@@ -45,13 +49,13 @@ try:
 
         cv2.imwrite("./filtered_images/de_pole3.png", img)
 
-        img2, lines ,stats,centroids = images3.images_4return(img)
+        img2, lines ,stats,centroids = images3.images_4return(img,H_fil)
 #        img2 = images3.images_4return(img)
 
         #出力
         cv2.imshow("view1",img2)
         print("End1")
-        if cv2.waitKey(1) == 27:
+        if cv2.waitKey(30) == 27:
             break
         cv2.destroyAllWindows
 

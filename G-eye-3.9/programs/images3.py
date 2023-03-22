@@ -1,18 +1,18 @@
 import cv2
 import color_filter_X
-import blob
+import test_images.blob as blob
 import shirushi
 import line
 import numpy as np
-import H_change
+#import save_deta.H_change as H_change
 
-def images_4return(img):
-    h,w = img.shape[:2]
-#    print("imread has ended")
+def images_4return(img,H_fil):
+    #setup
+    h,w = img.shape[:2]    
 
 
 
-    img = cv2.blur(img,(3,3))
+#    img = cv2.blur(img,(3,3))
     
     #img_H = H_change.change_H(img,Hi=0.057177615)
 #default 0.034439
@@ -22,12 +22,12 @@ def images_4return(img):
 #    return img_H,0,0,0
 
     #ポールの色を抽出
-    img2 = color_filter_X.color_filter_X(img, (16,135,40),(19,175,210))
+    img2 = color_filter_X.color_filter_X(img, (17,100,100),(19,255,255))
 
     img3 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
     print("color_filter has ended")
 
-    return img3,0,0,0
+    #return img3,0,0,0
 
     #2値化
     border = 2
