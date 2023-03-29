@@ -2,9 +2,31 @@ import pyrealsense2 as rs
 import numpy as np
 import cv2
 import images4 as images3
-import line
-import H_change as Hf
+import defs.line as line
+import defs.H_change as H_c
 #import H_filter as Hf
+import defs.H_middle as hm
+
+Hue=19
+Hue_wide=2
+pole_num=80
+checkdef=[0,0,0]
+
+#コールバック用関数
+def Hue_center_def(X):
+    global Hue
+    Hue=X
+    checkdef[0]=1
+
+def Hue_wide_def(X):
+    global Hue_wide
+    Hue_wide=X
+    checkdef[1]=1
+
+def pole_num_def(X):
+    global pole_num
+    pole_num=X
+    checkdef[2]=1
 
 #画像インポートまではネット上のサンプルコードを流用して行いました
 #
@@ -22,9 +44,10 @@ profile = pipe.start(conf)
 
 cnt = 0
 
+#画質変更で落ちるならここ！
 img_Hfil=cv2.imread("./programs/images/H_filter.png")
 h,w=img_Hfil.shape[:2]
-H_fil=Hf.change_H(h,w)
+H_fil=H_c.change_H(h,w)
 #H_fil=Hf.filter(img_Hfil)
 
 
@@ -32,10 +55,35 @@ H_fil=Hf.change_H(h,w)
 cv2.namedWindow("view1", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("view1", 640, 480)
 
+cv2.createTrackbar("Hue_center",
+                   "view1",
+                    19,
+                    30,
+                    Hue_center_def)
+
+
+cv2.createTrackbar("Hue_wide",
+                   "view1",
+                    2,
+                    10,
+                    Hue_wide_def)
+
+cv2.createTrackbar("Chose_poles",
+                   "view1",
+                    5,
+                    10,
+                    pole_num_def)
+
+#cv2.setMouseCallback("Win_a",
+#                    averages)
+
 print("setup ended")
 
 try:
     while True:
+        print(Hue)
+        print(Hue_wide)
+        print(pole_num)
         frames = pipe.wait_for_frames()
 
         # frameデータを取得
@@ -53,18 +101,18 @@ try:
 
         #cv2.imwrite("./filtered_images/de_pole3.png", img)
 
-        img2, lines ,stats,centroids = images3.images_4return(img,H_fil)
+        img2, lines ,stats,centroids = images3.images_4return(img,H_fil,Hue,Hue_wide)
 #        img2 = images3.images_4return(img)
 
         #出力
         cv2.imshow("view1",img2)
-        print("End1")
-        if cv2.waitKey(10) == 27:
+        #print("End1")
+        if cv2.waitKey(1) == 27:
             break
         cv2.destroyAllWindows
 
         
-        print("End 1frame")
+        #print("End 1frame")
 
 
 except Exception as err:

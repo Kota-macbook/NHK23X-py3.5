@@ -34,7 +34,7 @@ def lines(img_Color,img_blobed,h,w):
 
     const1 = 0
 
-    print(line)
+    #print(line)
 
     for j in line:
         theta = j[0][1]
@@ -43,8 +43,8 @@ def lines(img_Color,img_blobed,h,w):
             print(str(lines[const1][0]) +"  "+ str(lines[const1][1]))
             lines[const1][0] = j[0][0]
             lines[const1][1] = j[0][1]
-            print(str(j[0][0]) +"  "+ str(j[0][1]))
-            print(str(lines[const1][0]) +"  "+ str(lines[const1][1]))
+            #print(str(j[0][0]) +"  "+ str(j[0][1]))
+            #print(str(lines[const1][0]) +"  "+ str(lines[const1][1]))
 
             const1 += 1
 
