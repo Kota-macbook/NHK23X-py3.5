@@ -1,9 +1,10 @@
 import pyrealsense2 as rs
 import numpy as np
 import cv2
-import images3
+import images4 as images3
 import line
-import H_filter as Hf
+import H_change as Hf
+#import H_filter as Hf
 
 #画像インポートまではネット上のサンプルコードを流用して行いました
 #
@@ -22,7 +23,10 @@ profile = pipe.start(conf)
 cnt = 0
 
 img_Hfil=cv2.imread("./programs/images/H_filter.png")
-H_fil=Hf.filter(img_Hfil)
+h,w=img_Hfil.shape[:2]
+H_fil=Hf.change_H(h,w)
+#H_fil=Hf.filter(img_Hfil)
+
 
 #windowの設定
 cv2.namedWindow("view1", cv2.WINDOW_NORMAL)
@@ -47,7 +51,7 @@ try:
         #画像処理
         #img = cv2.imread("./test_images/de_pole4.png")
 
-        cv2.imwrite("./filtered_images/de_pole3.png", img)
+        #cv2.imwrite("./filtered_images/de_pole3.png", img)
 
         img2, lines ,stats,centroids = images3.images_4return(img,H_fil)
 #        img2 = images3.images_4return(img)
@@ -55,7 +59,7 @@ try:
         #出力
         cv2.imshow("view1",img2)
         print("End1")
-        if cv2.waitKey(30) == 27:
+        if cv2.waitKey(10) == 27:
             break
         cv2.destroyAllWindows
 

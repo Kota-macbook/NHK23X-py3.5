@@ -11,6 +11,6 @@ def filter(img):
 
     H_ave=np.mean(H,dtype=np.int16)
 
-    H_fil=H_ave-H
+    H_fil=19-H
 
     return H_fil

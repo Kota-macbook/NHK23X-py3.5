@@ -1,7 +1,6 @@
 import numpy
 import cv2
-def color_filter_X(img,smaller,bigger):
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+def color_filter_X(img,hsv,smaller,bigger):
     frame_mask = cv2.inRange(hsv,smaller,bigger)
     dst = cv2.bitwise_and(img,img,mask=frame_mask)
     return dst

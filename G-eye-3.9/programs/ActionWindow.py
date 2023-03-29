@@ -68,14 +68,14 @@ for i in range(13):
     cv2.line(glaf,(20,y1),(10,y1),(0,0,0),2)
     cv2.line(glaf,(x2,532),(x2,542),(0,0,0),2)
 
-    cv2.createTrackbar("Track",
-                    "Win_a",
+cv2.createTrackbar("Track",
+                   "Win_a",
                     128,
                     255,
                     printing)
 
-    cv2.setMouseCallback("Win_a",
-                        averages)
+cv2.setMouseCallback("Win_a",
+                    averages)
 
 
 while True:

@@ -22,20 +22,12 @@ def averages(img,x,y):
     cv2.rectangle(img,(x+r+1,y+r+1),(x-r-1,y-r-1),(0,0,0),-1)
     return img
 
-img4 = cv2.imread("./test_images/de_pole4.png")
+img4 = cv2.imread("filtered_images/de_pole3.png")
 
 
 print("img4")
-averages(img4,400,651)
-averages(img4,400,601)
-averages(img4,400,551)
-averages(img4,400,501)
-averages(img4,400,451)
-averages(img4,400,401)
-averages(img4,400,351)
-averages(img4,713,97)
-averages(img4,713,47)
-
+averages(img4,647,288)
+averages(img4,647,238)
 
 cv2.namedWindow("img", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("img", 640, 480)

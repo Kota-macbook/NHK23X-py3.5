@@ -1,48 +1,49 @@
 import cv2
 import color_filter_X
-import test_images.blob as blob
+import blob as blob
 import shirushi
 import line
 import numpy as np
-#import save_deta.H_change as H_change
 
 def images_4return(img,H_fil):
+    print(img.shape)
+
     #setup
     h,w = img.shape[:2]
     img_HSV=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-    img_Blur=cv2.blur(img,(3,3))
+    #img_Blur=cv2.blur(img,(3,3))
     H,S,V=cv2.split(img_HSV)
     
+#    cv2.imwrite("./filtered_images/de_pole4.png", img)
 
-    
+    #カメラの補正(Hue)
+#    H_fil=H.astype(np.int16)+H_fil
+    H_Re=H+H_fil
+    img_HSV=cv2.merge((H_Re,S,V))
+    #たまに落ちるエラーはここ!!
+    img_Re=cv2.cvtColor(img_HSV,cv2.COLOR_HSV2BGR)
+    cv2.imwrite("./filtered_images/de_pole3.png", img_Re)
 
 
-
-    
-    #img_H = H_change.change_H(img,Hi=0.057177615)
-#default 0.034439
-
-    cv2.imwrite("./filtered_images/de_pole4.png", img)
-
-#    return img_H,0,0,0
 
     #ポールの色を抽出
-    img2 = color_filter_X.color_filter_X(img, (17,100,100),(19,255,255))
+    img_Color = color_filter_X.color_filter_X(img_Re,img_HSV, (17,100,100),(20,255,255))
+    print("Color has ended")
+    return img_Color,0,0,0
 
-    img3 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-    print("color_filter has ended")
-
-    #return img3,0,0,0
+    img_G = cv2.cvtColor(img_Color, cv2.COLOR_BGR2GRAY)
+    print("Grey has ended")
+    #return img_G,0,0,0
 
     #2値化
     border = 2
-    ret, img3 = cv2.threshold(img3, border, 255, cv2.THRESH_BINARY)
+    ret, img_G = cv2.threshold(img_G, border, 255, cv2.THRESH_BINARY)
     print("judge has ended")
 
-    cv2.imwrite("./filtered_images/img_lines1.png",img3)
+#    cv2.imwrite("./filtered_images/img_lines1.png",img_G)
 
     #塊検出
-    nLabels, img_no_use, stats, centroids= blob.blobs(img3,1000)
+    nLabels, img_no_use, stats, centroids= blob.blobs(img_G,1000)
     print("blob has ended")
 
     #img=line.lines(img,img3,h,w)
@@ -52,7 +53,7 @@ def images_4return(img,H_fil):
     print("shirushi has ended")
 
 
-    cv2.imwrite("./filtered_images/img_lines2.png",img)
+#    cv2.imwrite("./filtered_images/img_lines2.png",img)
 
     lines = np.zeros(1)
 
@@ -63,7 +64,7 @@ def images_4return(img,H_fil):
 
 
 
-#img = cv2.imread("./test_images/camera4.png")
-#img, lines ,stats, centroids = images(img)
+img = cv2.imread("programs/images/H_filter.png")
+print(img.shape)
 #cv2.imwrite("./filtered_images/7_img_numbered.png", img)
 #cv2.imshow("img",img)
