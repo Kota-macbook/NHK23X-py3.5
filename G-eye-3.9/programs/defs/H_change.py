@@ -28,6 +28,8 @@ def change_H(h,w):
 
     return H_Re
 
+
+"""
 img = np.ones((720,1280,3),dtype=np.uint8)*100
 h,w=img.shape[:2]
 img2=change_H(h,w)
@@ -38,3 +40,4 @@ cv2.resizeWindow("img",410,370)
 cv2.imshow("img",img2)
 cv2.waitKey(0)
 cv2.destroyAllWindows
+"""

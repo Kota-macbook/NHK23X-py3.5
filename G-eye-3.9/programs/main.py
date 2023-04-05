@@ -4,8 +4,11 @@ import cv2
 import images4 as images3
 import defs.line as line
 import defs.H_change as H_c
+from defs import phase
+import math
 #import H_filter as Hf
-import defs.H_middle as hm
+#import defs.H_middle as hm
+
 
 Hue=19
 Hue_wide=2
@@ -81,9 +84,11 @@ print("setup ended")
 
 try:
     while True:
+        """
         print(Hue)
         print(Hue_wide)
         print(pole_num)
+        """
         frames = pipe.wait_for_frames()
 
         # frameデータを取得
@@ -104,6 +109,14 @@ try:
         img2, lines ,stats,centroids = images3.images_4return(img,H_fil,Hue,Hue_wide)
 #        img2 = images3.images_4return(img)
 
+        #phases
+        T_stats=list(stats.T)
+        print("T_stats="+str(T_stats[1]))
+        theta=phase.HighToTheta(T_stats[1].astype(int),int(h/2),0.674)
+        #print(theta)
+        #for i in range(theta.shape):
+        #    print(math.degrees(theta[i]))
+
         #出力
         cv2.imshow("view1",img2)
         #print("End1")
@@ -120,3 +133,4 @@ except Exception as err:
     print("type"+str(type(err)))
     print("args"+str(err.args))
     print("naiyopu"+str(err))
+    print(err)
