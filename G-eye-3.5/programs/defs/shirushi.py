@@ -10,8 +10,8 @@ def shirushi(img_num,h,nLabels,stats,centroids):
         haba = stats[i][2]
         takasa = stats[i][3]
 
-        hidariue = [stats[i][0],stats[i][1]]
-        migishita = [stats[i][0]+haba,stats[i][1]+takasa]
+        hidariue = (stats[i][0],stats[i][1])
+        migishita = (stats[i][0]+haba,stats[i][1]+takasa)
 
         xc = int(stats[i][0]+haba/2)
         yc = int(stats[i][1]+takasa/2)
@@ -34,7 +34,8 @@ def shirushi(img_num,h,nLabels,stats,centroids):
         moji_iti_hoseiY = int((scale*20) /2)
         moji_hutosa = int(small/15)
 
-        #img3=np.empty((len(img_num)))
+        #img3=np.ndarray(img_num)
+        #img3=np.zeros(img_num.shape,dtype=np.uint8)
         img3=img_num
         cv2.rectangle(img3,hidariue,migishita,(0,0,0),2)
         cv2.circle(img3, (xc,yc), r2,(255,0,255),-1)

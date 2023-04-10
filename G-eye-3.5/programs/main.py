@@ -6,6 +6,8 @@ import defs.H_change as H_c
 from defs import phase
 import ReachAndPhase as RAP
 from defs import movement as moves
+from defs import IandD
+from defs import go
 
 #import H_filter as Hf
 #import defs.H_middle as hm
@@ -14,6 +16,7 @@ Hue=19
 Hue_wide=2
 pole_num=80
 checkdef=[0,0,0]
+typeofnow=0
 
 #コールバック用関数
 def Hue_center_def(X):
@@ -34,9 +37,30 @@ def pole_num_def(X):
     pole_num=X
     checkdef[2]=1
 
+def types(X):
+    global typeofnow
+    typeofnow=X
+
 def go_def(X):
     global mode
     mode=X
+
+def targets(event,x,y,flags,param):
+    global stats
+    global Target
+    global Target_type
+    global typeofnow
+    if event==cv2.EVENT_LBUTTONDBLCLK:    
+        #Target[0]=8
+        for i in range(stats.shape[0]):
+            if x>stats[i][0] & x<stats[i][0]+stats[i][2]:
+                if y>stats[i][1] & y<stats[i][1]+stats[i][3]:
+                    num=0
+                    while Target[num]!=0:
+                        num+=1
+                    Target[num]=I
+                    Target_type[num]=typeofnow
+                    
 
 
 #画像インポートまではネット上のサンプルコードを流用して行いました
@@ -85,11 +109,20 @@ cv2.createTrackbar("Chose_poles",
                     10,
                     pole_num_def)
 
+cv2.createTrackbar("Type",
+                   "view1",
+                    2,
+                    3,
+                    types)
+
 cv2.createTrackbar("Go!",
                    "view1",
                     0,
                     1,
                     go_def)
+
+cv2.setMouseCallback("view1",
+                    targets)
 
 
 #cv2.setMouseCallback("Win_a",
@@ -117,9 +150,16 @@ print("setup ended")
 mode=0
 Target=[0,0,0,0,0,0,0,0]
 Target_type=[0,0,0,0,0,0,0,0]
-P=0
-I=0
-
+CON_PID_main=[1,0,0]
+L_I=0.0
+R_I=0.0
+L_D=0.0
+R_D=0.0
+L_log=0.0
+R_log=0.0
+CON_PID_control=[0,0,0]
+Integral=0
+move_for_I=0
 try:
     while True:
         frames = pipe.wait_for_frames()
@@ -143,24 +183,42 @@ try:
             break
         cv2.destroyAllWindows
 
+        print(Target)
 
         #発射用
         if (mode==1 |mode==2) & Target[0]!=0:
             pole_top=[centroids[Target[0]][0],stats[Target[0]][1]]
+            #Reachの単位はmm
             theta_X, Reach = RAP.RAP_def(pole_top,0.5,h,w)
+            
+            border_Phase=0.5
+            border_Gosa=0.5
+
+            L_I
+            L_move,R_move=moves.phase(theta_X,border_Phase,CON_PID_main,L_I,R_I,L_D,R_D)
+
+            L_I,R_I,L_D,R_D=IandD.IAndD(L_move,R_move,L_log,R_log,L_I,R_I)
+            L_log=L_move
+            R_log=R_move
 
 
+            
+            #エンコーダの数値に置き換え忘れないように気をつける
+            encorder_R=999
+            encorder_L=999
+            dos_moving_PID=moves.PID(en)
+            
+            I=(abs(L_I)+abs(R_I))/2
+            D=(abs(L_D)+abs(R_D))/2
+            gosa=Reach*theta_X#[mm]
+            #しきい値は調整すること！
+            if gosa<30 & I<0.5 & D<0.5:
+                mode=2
 
-            """
-            movement=moves.phase(theta_X,I,D)
-            move_Y.moving(movement)
-            if I<A:
-                if D<B:
-                    mode=2
             #(While)などのループかもしれない
             if mode==2:
+                #def go_amoはまだ書いていない、適当に0を返しているので注意
                 go_amount=go.go_amo(Reach,Target_type([0]))
-                Yasuda.go_pid(go_amount)
 
                 for i in range(int(Target.shape[0])-1):
                     Target[i]=[i+1]
@@ -171,8 +229,7 @@ try:
                 mode=0
 
 
-
-"""
+                
 
 
 
