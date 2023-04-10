@@ -4,16 +4,18 @@ import cv2
 import images4 as images3
 import defs.H_change as H_c
 from defs import phase
-import ReachAndPhase as RAP
-from defs import movement as moves
-
+#import ReachAndPhase as RAP
 #import H_filter as Hf
 #import defs.H_middle as hm
 
+#
 Hue=19
 Hue_wide=2
 pole_num=80
 checkdef=[0,0,0]
+
+mode=0
+
 
 #コールバック用関数
 def Hue_center_def(X):
@@ -40,6 +42,9 @@ def go_def(X):
 
 
 #画像インポートまではネット上のサンプルコードを流用して行いました
+
+
+
 # カメラの設定
 conf = rs.config()
 # RGB
@@ -53,12 +58,27 @@ cnt = 0
 
 
 
+
+
+
+
+
+
+
+
+
 #H補正用画像
 #画質変更で落ちるならここ！
 img_Hfil=cv2.imread("./programs/images/H_filter.png")
 h,w=img_Hfil.shape[:2]
 H_fil=H_c.change_H(h,w)
 #H_fil=Hf.filter(img_Hfil)
+
+
+
+
+
+
 
 
 
@@ -97,31 +117,14 @@ cv2.createTrackbar("Go!",
 
 print("setup ended")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#ここから本編
-
-mode=0
-Target=[0,0,0,0,0,0,0,0]
-Target_type=[0,0,0,0,0,0,0,0]
-P=0
-I=0
-
 try:
     while True:
+        """
+        print(Hue)
+        print(Hue_wide)
+        print(pole_num)
+        """
+
         frames = pipe.wait_for_frames()
         # frameデータを取得
         color_frame = frames.get_color_frame()
@@ -130,13 +133,50 @@ try:
         img = np.asanyarray(color_frame.get_data())
         # 距離情報をカラースケール画像に変換する
         #depth_color_frame = rs.colorizer().colorize(depth_frame)
-        #depth_image = np.asanyarray(depth_color_frame.get_data()
+        #depth_image = np.asanyarray(depth_color_frame.get_data())
+
+
+        print("import Ended")
+
+
+
+
 
 
 
         #画像処理
         img2, lines ,stats,centroids = images3.images_4return(img,H_fil,Hue,Hue_wide)
-        #表示
+
+
+
+
+
+        print("images4 ended")
+
+
+
+        """
+        #phases
+        stats_Y=list(stats.T)
+        #print("T_stats="+str(stats_Y[1]))
+        theta_Y=phase.HighToTheta(stats_Y[1].astype(int),int(h/2),0.674)
+        #print(centroids.shape)
+        stats_X=list(centroids.T)
+        theta_X=phase.HighToTheta(stats_X[0].astype(int),int(w/2),0.674*(w/h))
+        #print("("+str(theta_X)+","+str(theta_Y)+")")
+        #for i in range(theta.shape):
+        #    print(math.degrees(theta[i]))
+
+
+        print("phase ended")
+
+        """
+
+
+
+
+
+        #出力
         cv2.imshow("view1",img2)
         #print("End1")
         if cv2.waitKey(1) == 27:
@@ -144,35 +184,11 @@ try:
         cv2.destroyAllWindows
 
 
-        #発射用
-        if (mode==1 |mode==2) & Target[0]!=0:
-            pole_top=[centroids[Target[0]][0],stats[Target[0]][1]]
-            theta_X, Reach = RAP.RAP_def(pole_top,0.5,h,w)
 
 
 
-            """
-            movement=moves.phase(theta_X,I,D)
-            move_Y.moving(movement)
-            if I<A:
-                if D<B:
-                    mode=2
-            #(While)などのループかもしれない
-            if mode==2:
-                go_amount=go.go_amo(Reach,Target_type([0]))
-                Yasuda.go_pid(go_amount)
-
-                for i in range(int(Target.shape[0])-1):
-                    Target[i]=[i+1]
-                    Target_type[i]=[i+1]
-
-                Target[Target.shape[0]]=0
-                Target_type[Target_type.shape[0]]=0
-                mode=0
 
 
-
-"""
 
 
 

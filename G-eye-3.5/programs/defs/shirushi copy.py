@@ -34,8 +34,16 @@ def shirushi(img_num,h,nLabels,stats,centroids):
         moji_iti_hoseiY = int((scale*20) /2)
         moji_hutosa = int(small/15)
 
+
         cv2.rectangle(img_num,hidariue,migishita,(0,0,0),2)
         cv2.circle(img_num, (xc,yc), r2,(255,0,255),-1)
         cv2.putText(img_num, str(i), (xc-moji_iti_hoseiX,yc+moji_iti_hoseiY), font, scale, color, moji_hutosa, cv2.LINE_AA)
 
     return img_num
+
+img=cv2.imread("./programs/images/H_filter.png")
+nLabels=2
+stats=((600,200,100,100),(600,200,100,100))
+centroids=((650,250))
+h=720
+img2=shirushi(img,h,nLabels,stats,centroids)
