@@ -3,11 +3,12 @@ import numpy as np
 import cv2
 import images4 as images3
 import defs.H_change as H_c
-from defs import phase
 import ReachAndPhase as RAP
+import copy
 from defs import movement as moves
 from defs import IandD
 from defs import go
+from defs import lock_on
 
 #import H_filter as Hf
 #import defs.H_middle as hm
@@ -50,17 +51,10 @@ def targets(event,x,y,flags,param):
     global Target
     global Target_type
     global typeofnow
-    if event==cv2.EVENT_LBUTTONDBLCLK:    
-        #Target[0]=8
-        for i in range(stats.shape[0]):
-            if x>stats[i][0] & x<stats[i][0]+stats[i][2]:
-                if y>stats[i][1] & y<stats[i][1]+stats[i][3]:
-                    num=0
-                    while Target[num]!=0:
-                        num+=1
-                    Target[num]=I
-                    Target_type[num]=typeofnow
-                    
+
+    if event==cv2.EVENT_LBUTTONDOWN:    
+        Target,Target_type=lock_on.lock_on(stats[1:],Target,Target_type,typeofnow,x,y)
+
 
 
 #画像インポートまではネット上のサンプルコードを流用して行いました
@@ -179,17 +173,19 @@ try:
         #表示
         cv2.imshow("view1",img2)
         #print("End1")
-        if cv2.waitKey(1) == 27:
+        if cv2.waitKey(3000) == 27:
             break
         cv2.destroyAllWindows
 
-        print(Target)
 
+
+        print(Target)
         #発射用
         if (mode==1 |mode==2) & Target[0]!=0:
             pole_top=[centroids[Target[0]][0],stats[Target[0]][1]]
             #Reachの単位はmm
             theta_X, Reach = RAP.RAP_def(pole_top,0.5,h,w)
+            
             
             border_Phase=0.5
             border_Gosa=0.5
@@ -204,9 +200,9 @@ try:
 
             
             #エンコーダの数値に置き換え忘れないように気をつける
-            encorder_R=999
-            encorder_L=999
-            dos_moving_PID=moves.PID(en)
+            #encorder_R=999
+            #encorder_L=999
+            #dos_moving_PID=moves.PID(en)
             
             I=(abs(L_I)+abs(R_I))/2
             D=(abs(L_D)+abs(R_D))/2
@@ -217,15 +213,21 @@ try:
 
             #(While)などのループかもしれない
             if mode==2:
+                #発射の反動に備えて踏ん張らせる
+                L_move=0
+                R_move=0
                 #def go_amoはまだ書いていない、適当に0を返しているので注意
-                go_amount=go.go_amo(Reach,Target_type([0]))
+                go_amount=go.go_amo(Reach,Target_type[0])
 
-                for i in range(int(Target.shape[0])-1):
-                    Target[i]=[i+1]
-                    Target_type[i]=[i+1]
+                #Yasuda.go 発射用仮称
 
-                Target[Target.shape[0]]=0
-                Target_type[Target_type.shape[0]]=0
+
+                for i in range(len(Target)-1):
+                    Target[i]=Target[i+1]
+                    Target_type[i]=Target_type[i+1]
+
+                Target[len(Target)]=0
+                Target_type[len(Target_type)]=0
                 mode=0
 
 
